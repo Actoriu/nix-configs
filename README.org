@@ -6,9 +6,7 @@
 #+OPTIONS: ^:nil
 #+PROPERTY: header-args :comments link
 
-Configuration for NixOS and user home (dot files).
-It is provided via Nix flakes and includes the
-following components:
+Configuration for NixOS and user home (dot files). It is provided via Nix flakes and includes the following components:
 
 * Usage
 

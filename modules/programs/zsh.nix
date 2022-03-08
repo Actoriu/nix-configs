@@ -13,7 +13,7 @@
       };
 
       autocd = true;
-      #enableAutosuggestions = true;
+      # enableAutosuggestions = true;
       enableCompletion = true;
 
       initExtra = with pkgs; ''
@@ -61,11 +61,11 @@
           source ${zsh-fast-syntax-highlighting}/share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh
           source ${zsh-history-substring-search}/share/zsh-history-substring-search/zsh-history-substring-search.zsh
           source ${zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-          #source ${zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
+          # source ${zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
           # ${zsh-completions}
 
-          #eval "$(jump shell)"
-          #eval $(thefuck --alias)
+          # eval "$(jump shell)"
+          # eval $(thefuck --alias)
           function set_win_title(){
               echo -ne "\033]0; $TERM - $PWD \007"
                                      }

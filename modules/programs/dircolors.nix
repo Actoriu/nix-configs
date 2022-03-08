@@ -1,0 +1,9 @@
+{ ... }:
+
+{
+  programs = {
+    dircolors = {
+      enable = true;
+    };
+  };
+}

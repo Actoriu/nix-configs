@@ -256,7 +256,6 @@
 #         echo "        curl -sLf https://spacevim.org/install.sh | bash -s -- --uninstall"
 #     }
 #     # }}}
-
 #     # install_done {{{
 #     install_done () {
 #         echo_with_color $Yellow ""
@@ -378,10 +377,10 @@
     ];
   };
 
-  home.file.".emacs.d" = {
-    source = pkgs.spacemacs;
-    recursive = true;
-  };
+  # home.file.".emacs.d" = {
+  #   source = pkgs.spacemacs;
+  #   recursive = true;
+  # };
 
   # home = {
   #   file = {

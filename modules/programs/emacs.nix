@@ -152,7 +152,7 @@ let
     }
     # }}}
 
-        # spacemacs_install {{{
+    # spacemacs_install {{{
     spacemacs_install () {
         if [[ ! -d "$HOME/.emacs.d/.git" ]]; then
             info "Trying to clone Spacemacs."
@@ -257,7 +257,7 @@ let
     }
     # }}}
 
-        # install_done {{{
+    # install_done {{{
     install_done () {
         echo_with_color $Yellow ""
         echo_with_color $Yellow "Almost done!"
@@ -373,7 +373,7 @@ in
         ]))
       ripgrep
       ripgrep-all
-      spacemacs
+      # spacemacs
       translate-shell
     ];
   };

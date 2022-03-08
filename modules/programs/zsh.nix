@@ -14,7 +14,7 @@
 
       autocd = true;
       # enableAutosuggestions = true;
-      enableCompletion = true;
+      # enableCompletion = true;
 
       initExtra = with pkgs; ''
           setopt nomatch
@@ -58,9 +58,9 @@
           export LESS_TERMCAP_ue=$'\E[0m'
           export LESS_TERMCAP_us=$'\E[01;32m'
 
-          source ${zsh-fast-syntax-highlighting}/share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh
-          source ${zsh-history-substring-search}/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-          source ${zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+          # source ${zsh-fast-syntax-highlighting}/share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh
+          # source ${zsh-history-substring-search}/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+          # source ${zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
           # source ${zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
           # ${zsh-completions}
 
@@ -87,6 +87,34 @@
 
           unset keymap
       '';
+
+      plugins = [
+        {
+          name = "zsh-autosuggestions";
+          src = pkgs.zsh-autosuggestions;
+          file = "share/zsh-autosuggestions/zsh-autosuggestions.zsh";
+        }
+        {
+          name = "zsh-fast-syntax-highlighting";
+          src = pkgs.zsh-fast-syntax-highlighting;
+          file = "share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh";
+        }
+        {
+          name = "zsh-history-substring-search";
+          src = pkgs.zsh-history-substring-search;
+          file = "share/zsh-history-substring-search/zsh-history-substring-search.zsh";
+        }
+        {
+          name = "powerlevel10k";
+          src = pkgs.zsh-powerlevel10k;
+          file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+        }
+        # {
+        #   name = "powerlevel10k-config";
+        #   src = pkgs.substituteAll { src=./zsh-p10k.zsh; dir="bin"; };
+        #   file = "bin/zsh-p10k.zsh";
+        # }
+      ];
     };
   };
 }

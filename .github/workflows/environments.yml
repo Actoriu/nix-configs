@@ -1,0 +1,79 @@
+---
+# referenced from https://github.com/NobbZ/nixos-config/blob/master/.github/workflows/build.yml
+
+name: "Build home-manager customized"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  overlays:
+    name: Build overlays package ${{ matrix.package }}
+    strategy:
+      matrix:
+        package:
+          - advcp
+          - elixir-lsp
+          - erlang-ls
+          - emacsGit
+          - keyleds
+          - rofi-unicode
+          - keepass
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v16
+        with:
+          install_url: https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.7.0pre20220303_b09baf6/install
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Use cachix
+        uses: cachix/cachix-action@v10
+        with:
+          name: actoriu
+          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+
+      - name: Build activation package
+        run: |
+          nix build -L .#${{ matrix.package }}
+
+  build_home_manager_configurations:
+    name: Build Home-Manager configuration for ${{ matrix.user }}
+    needs: overlays
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        user:
+          - actoriu
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          # Nix Flakes doesn't work on shallow clones
+          fetch-depth: 0
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v16
+        with:
+          install_url: https://github.com/numtide/nix-unstable-installer/releases/download/nix-2.7.0pre20220303_b09baf6/install
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Use cachix
+        uses: cachix/cachix-action@v10
+        with:
+          name: actoriu
+          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+          skipPush: github.ref != 'refs/heads/main'
+
+      - name: Build activation package
+        run: |
+          nix build -L .#${{ matrix.hostname }}
+...

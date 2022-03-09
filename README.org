@@ -42,8 +42,6 @@ Configuration for NixOS and user home (dot files). It is provided via Nix flakes
     #+end_example
 
   - Nix-on-droid
-  
-    : nix-on-droid switch --flake '~/.config/nixpkgs#device'
 
     #+begin_example
       nix-on-droid switch --flake '~/.config/nixpkgs#device'

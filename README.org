@@ -1,6 +1,6 @@
-#+TITLE: Nix-Config
+#+TITLE: Nix-on-droid Config
 #+Author: Actoriu
-#+CATEGORY: nix-config
+#+CATEGORY: nix-on-droid config
 #+DESCRIPTION: A literate programming style exposition of my NixOS and user home (dot files) configuration
 #+LANGUAGE: en
 #+STARTUP: overview indent align

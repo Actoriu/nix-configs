@@ -1,15 +1,52 @@
 #+TITLE: nix-on-droid config
-#+DESCRIPTION:
+#+Author: Actoriu
+#+CATEGORY: nix-on-droid config
+#+DESCRIPTION: Configuration for NixOS and user home (dot files). It is provided via Nix flakes and includes the following components:
 #+LANGUAGE: en
 #+STARTUP: overview indent align
 #+BABEL: :cache yes
-#+OPTIONS: ^:nil
+#+OPTIONS: ^:nil num:nil tags:nil
 #+PROPERTY: header-args :comments link
-Configuration for NixOS and user home (dot files). It is provided via Nix flakes and includes the following components:
+
+# Badge
+[[https://nixos.org][https://img.shields.io/badge/NixOS-v21.11-blue.svg?style=flat-square&logo=NixOS&logoColor=white]]
+[[https://mit-license.org/][https://img.shields.io/badge/license-MIT-green.svg?dummy]]
+
+* Table of Contents                                       :TOC_4_gh:noexport:
+- [[#usage][Usage]]
+  - [[#flake][Flake]]
+  - [[#nixos][Nixos]]
+  - [[#non-nixos][Non-Nixos]]
 
 * Usage
 
-Standalone setup:
+Configuration for NixOS and user home (dot files). It is provided via Nix flakes and includes the following components:
+
+** Flake
+
+[[https://nixos.wiki/wiki/Flakes][wiki Flakes]]
+
+** Nixos
+
+#+begin_example
+  sudo nixos-rebuild switch --flake '/etc/nixos#nixos-desktop'
+#+end_example
+
+** Non-Nixos
+
+Nixos version <= 20.05
+
+#+begin_example
+  nix-shell -p nixUnstable --command "nix --experimental-features 'nix-command flakes' build '.#$1'"
+#+end_example
+
+Nixos version > 21.05
+
+#+begin_example
+  nix-shell -p nix --command "nix --experimental-features 'nix-command flakes' build '.#$1'"
+#+end_example
+
+** Nix-on-droid
 
 #+BEGIN_SRC sh :tangle no
   nix-on-droid -h

@@ -1,11 +1,11 @@
-#+TITLE: nix-on-droid config
+#+TITLE: Nix-Config
 #+Author: Actoriu
-#+CATEGORY: nix-on-droid config
-#+DESCRIPTION: Configuration for NixOS and user home (dot files). It is provided via Nix flakes and includes the following components:
+#+CATEGORY: nix-config
+#+DESCRIPTION: A literate programming style exposition of my NixOS and user home (dot files) configuration
 #+LANGUAGE: en
 #+STARTUP: overview indent align
 #+BABEL: :cache yes
-#+OPTIONS: ^:nil num:nil tags:nil
+#+OPTIONS: ^:nil num:nil tags:nil \n:t
 #+PROPERTY: header-args :comments link
 
 # Badge
@@ -13,42 +13,36 @@
 [[https://mit-license.org/][https://img.shields.io/badge/license-MIT-green.svg?dummy]]
 
 * Table of Contents                                       :TOC_4_gh:noexport:
-- [[#usage][Usage]]
-  - [[#flake][Flake]]
-  - [[#nixos][Nixos]]
-  - [[#non-nixos][Non-Nixos]]
+- [[#introduction][Introduction]]
+  - [[#usage][Usage]]
+    - [[#with-flake][With Flake]]
 
-* Usage
+* Introduction
 
 Configuration for NixOS and user home (dot files). It is provided via Nix flakes and includes the following components:
 
-** Flake
+** Usage
+
+*** With Flake
 
 [[https://nixos.wiki/wiki/Flakes][wiki Flakes]]
 
-** Nixos
+- Nixos
 
-#+begin_example
-  sudo nixos-rebuild switch --flake '/etc/nixos#nixos-desktop'
-#+end_example
+  #+begin_example
+    sudo nixos-rebuild switch --flake '/etc/nixos#nixos-desktop'
+  #+end_example
 
-** Non-Nixos
+- Non-Nixos
 
-Nixos version <= 20.05
+  - NixOS version <=21.05
 
-#+begin_example
-  nix-shell -p nixUnstable --command "nix --experimental-features 'nix-command flakes' build '.#$1'"
-#+end_example
+    #+begin_example
+      nix-shell -p nixUnstable --command "nix --experimental-features 'nix-command flakes' build '.#$1'"
+    #+end_example
 
-Nixos version > 21.05
+  - Nix-on-droid
 
-#+begin_example
-  nix-shell -p nix --command "nix --experimental-features 'nix-command flakes' build '.#$1'"
-#+end_example
-
-** Nix-on-droid
-
-#+BEGIN_SRC sh :tangle no
-  nix-on-droid -h
-  nix-on-droid switch --flake .#device
-#+END_SRC
+    #+begin_example
+      nix-on-droid switch --flake '~/.config/nixpkgs#device'
+    #+end_example

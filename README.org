@@ -11,7 +11,6 @@
 # Badge
 [[https://nixos.org][https://img.shields.io/badge/NixOS-v21.11-blue.svg?style=flat-square&logo=NixOS&logoColor=white]]
 [[https://mit-license.org/][https://img.shields.io/badge/license-MIT-green.svg?dummy]]
------
 
 * Table of Contents                                       :TOC_4_gh:noexport:
 - [[#introduction][Introduction]]

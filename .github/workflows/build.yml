@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         host:
-          - d630
+          - device
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

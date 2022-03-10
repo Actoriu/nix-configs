@@ -16,7 +16,7 @@ on:
 
 jobs:
   nix:
-    name: Build Nix configuration for ${{ matrix.system }}
+    # name: Build Nix configuration for ${{ matrix.system }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

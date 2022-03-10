@@ -62,7 +62,7 @@
                            allowUnfree = true;
                          };
                        };
-                       import = ./modules/programs/default.nix;
+                       imports = [ ./modules/programs/default.nix ];
                      };
                    };
                  };

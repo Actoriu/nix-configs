@@ -51,7 +51,7 @@
                device = nix-on-droid.lib.nixOnDroidConfiguration {
                  system = "aarch64-linux";
                  config = {
-                   import = ./nix-on-droid.nix;
+                   imports = [ ./nix-on-droid.nix ];
                    home-manager = {
                      backupFileExtension = "backup";
                      useGlobalPkgs = true;

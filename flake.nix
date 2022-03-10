@@ -39,15 +39,15 @@
   outputs =
     { self
     , nixpkgs
-    , flake-utils
+    #, flake-utils
     , home-manager
     , nix-on-droid
     , ...
     }@inputs:
-    flake-utils.lib.eachSystem [ "aarch64-linux" "x86_64-linux" ] (system:
-      let pkgs = nixpkgs.legacyPackages.${system};
-      in { devShell = import ./shell.nix { inherit pkgs; }; }) // {
-             nixOnDroidConfigurations = {
+    #flake-utils.lib.eachSystem [ "aarch64-linux" "x86_64-linux" ] (system:
+    #  let pkgs = nixpkgs.legacyPackages.${system};
+    #  in { devShell = import ./shell.nix { inherit pkgs; }; }) // {
+    {         nixOnDroidConfigurations = {
                device = nix-on-droid.lib.nixOnDroidConfiguration {
                  system = "aarch64-linux";
                  config = {

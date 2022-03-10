@@ -58,7 +58,7 @@
                            allowUnfree = true;
                          };
                        };
-                       import ./modules/programs/default.nix;
+                       import = ./modules/programs/default.nix;
                      };
                    };
                  };

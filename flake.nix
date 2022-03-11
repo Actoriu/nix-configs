@@ -62,9 +62,9 @@
                            allowUnfree = true;
                          };
                        };
-                       # import = ./modules/programs/default.nix;
+                       imports = [ ./modules/programs/default.nix ];
                      };
-                     home-manager.config = import ./modules/programs/default.nix;
+                     # home-manager.config = import ./modules/programs/default.nix;
                    };
                  };
                  extraModules = [

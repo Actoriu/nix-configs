@@ -11,7 +11,7 @@
     ./git.nix
     # ./home.nix
     ./neovim.nix
-    ./nix.nix
+    # ./nix.nix
     ./zoxide.nix
     ./zsh.nix
   ];

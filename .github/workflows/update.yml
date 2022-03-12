@@ -45,10 +45,10 @@ jobs:
         run: git switch -c ${{ steps.branch.outputs.branch }}
 
       - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v4.13.1
         id: commit
         with:
-          commit_author: Tobias Happ <tobias.happ@gmx.de>
+          commit_author: Author <actions@github.com> 
           commit_message: "flake.inputs: automatic update"
           branch: ${{ steps.branch.outputs.branch }}
           push_options: --force
@@ -75,14 +75,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check if update branch is behind master
+      - name: Check if update branch is behind main
         run: git diff origin/${{ needs.update.outputs.branch }}...origin/main --exit-code
 
-      - name: Merge update into master
+      - name: Merge update into main
         run: git merge origin/${{ needs.update.outputs.branch }}
 
-      - name: Push master
-        run: git push origin master
+      - name: Push main
+        run: git push origin main
 
       - name: Delete update branch
         run: git push --delete origin ${{ needs.update.outputs.branch }} 

@@ -15,6 +15,7 @@ jobs:
     outputs:
       branch: ${{ steps.branch.outputs.branch }}
       update_available: ${{ steps.commit.outputs.changes_detected }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -59,7 +60,7 @@ jobs:
     with:
       branch: ${{ needs.update.outputs.branch }}
     secrets:
-      CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_SIGNING_KEY }}
+      # CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_SIGNING_KEY }}
 
   merge:
     runs-on: ubuntu-latest
@@ -74,7 +75,7 @@ jobs:
           fetch-depth: 0
 
       - name: Check if update branch is behind master
-        run: git diff origin/${{ needs.update.outputs.branch }}...origin/master --exit-code
+        run: git diff origin/${{ needs.update.outputs.branch }}...origin/main --exit-code
 
       - name: Merge update into master
         run: git merge origin/${{ needs.update.outputs.branch }}

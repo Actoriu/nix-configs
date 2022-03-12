@@ -11,7 +11,8 @@ on:
         required: false
         type: string
     secrets:
-      CACHIX_SIGNING_KEY:
+      # CACHIX_SIGNING_KEY:
+      CACHIX_AUTH_TOKEN
         required: true
 
 jobs:

@@ -1,8 +1,10 @@
----
-name: Build and test flake outputs
+name: CI
 
 on:
   push:
+    branches:
+      - main
+      - flake-update
   workflow_call:
     inputs:
       branch:
@@ -16,8 +18,8 @@ on:
         required: true
 
 jobs:
-  nix:
-    # name: Build Nix configuration for ${{ matrix.system }}
+  build:
+    name: Build Nix configuration for ${{ matrix.system }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -50,9 +52,9 @@ jobs:
           # signingKey: ${{ secrets.CACHIX_SIGNING_KEY }}
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      - name: Build command (aarch64)
+      - name: Build command for ${{ matrix.system }}
         if: matrix.system == 'aarch64'
-        uses: uraimo/run-on-arch-action@13e4281fcff03a9fbf9c564b6bc77cbef951a6f8
+        uses: uraimo/run-on-arch-action@2.1.1
         with:
           arch: aarch64
           distro: alpine_latest
@@ -86,4 +88,3 @@ jobs:
               --option keep-going true \
               --show-trace \
               ${{ matrix.nix-command }}
-...

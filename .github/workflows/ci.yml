@@ -54,7 +54,7 @@ jobs:
 
       - name: Build command for ${{ matrix.system }}
         if: matrix.system == 'aarch64'
-        uses: uraimo/run-on-arch-action@2.1.1
+        uses: uraimo/run-on-arch-action@v2.1.1
         with:
           arch: aarch64
           distro: alpine_latest

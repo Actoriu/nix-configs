@@ -11,8 +11,8 @@ updates:
       prefix: "chore"
       include: "scope"
     reviewers:
-      - Actoriu
+      - "Actoriu"
     assignees:
-      - Actoriu
+      - "Actoriu"
     labels:
-      - CI
+      - "Automation dependabot"

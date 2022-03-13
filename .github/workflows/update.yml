@@ -28,7 +28,7 @@ jobs:
             access-tokens = github.com = ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update flakes
-        run: nix flake update --commit-lock-file
+        run: nix flake update
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3.14.0

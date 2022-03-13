@@ -4,7 +4,7 @@ name: Update flakes
 
 on:
   schedule:
-    - cron:  '0 21 * * 0'
+    - cron:  '* */8 * * *'
 
 jobs:
   update:

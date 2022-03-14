@@ -38,6 +38,10 @@ jobs:
           delete-branch: true
           title: "flake: update"
 
+      - name: Enable Pull Request Automerge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v1.2.0
+
   #     - name: Set branch name output
   #       id: branch
   #       run: echo "::set-output name=branch::ci/automatic-update-$(date +%Y-%m-%d)"

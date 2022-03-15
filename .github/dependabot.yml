@@ -5,14 +5,8 @@ updates:
     schedule:
       interval: daily
       time: "21:00"
-      timezone: "UTC"
+      timezone: UTC
     open-pull-requests-limit: 10
     commit-message:
       prefix: "chore"
       include: "scope"
-    reviewers:
-      - "Actoriu"
-    assignees:
-      - "Actoriu"
-    labels:
-      - "Automation dependabot"

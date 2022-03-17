@@ -1,94 +1,25 @@
 # referenced from https://github.com/NobbZ/nixos-config/blob/master/.github/workflows/build.yml
 
-name: Update flakes
+name: Update-flake-lock
 
 on:
+  workflow_dispatch:
   schedule:
     - cron:  '* */8 * * *'
 
 jobs:
-  update:
-    name: Update flake inputs
+  lockfile:
     runs-on: ubuntu-latest
-
-    # outputs:
-    #   branch: ${{ steps.branch.outputs.branch }}
-    #   update_available: ${{ steps.commit.outputs.changes_detected }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Install nix
         uses: cachix/install-nix-action@v16
         with:
           extra_nix_config: |
-            access-tokens = github.com = ${{ secrets.GITHUB_TOKEN }}
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update flakes
-        run: nix flake update
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3.14.0
-        with:
-          branch: flake-update
-          commit-message: "flake: update"
-          delete-branch: true
-          title: "flake: update"
-
-      - name: Enable Pull Request Automerge
-        if: steps.cpr.outputs.pull-request-operation == 'created'
-        uses: peter-evans/enable-pull-request-automerge@v1.2.0
-
-  #     - name: Set branch name output
-  #       id: branch
-  #       run: echo "::set-output name=branch::ci/automatic-update-$(date +%Y-%m-%d)"
-
-  #     - name: Create branch locally
-  #       run: git switch -c ${{ steps.branch.outputs.branch }}
-
-  #     - name: Commit changes
-  #       uses: stefanzweifel/git-auto-commit-action@v4.13.1
-  #       id: commit
-  #       with:
-  #         commit_author: Author <actions@github.com> 
-  #         commit_message: "flake.inputs: automatic update"
-  #         branch: ${{ steps.branch.outputs.branch }}
-  #         push_options: --force
-
-  # build:
-  #   uses: ./.github/workflows/ci.yml
-  #   needs: update
-  #   if: needs.update.outputs.update_available == 'true'
-  #   with:
-  #     branch: ${{ needs.update.outputs.branch }}
-  #   secrets:
-  #     # CACHIX_SIGNING_KEY: '${{ secrets.CACHIX_SIGNING_KEY }}'
-  #     CACHIX_AUTH_TOKEN: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-   
-  # merge:
-  #   needs:
-  #     - update
-  #     - build
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
-
-  #     - name: Check if update branch is behind main
-  #       run: git diff origin/${{ needs.update.outputs.branch }}...origin/main --exit-code
-
-  #     - name: Merge update into main
-  #       run: git merge origin/${{ needs.update.outputs.branch }}
-
-  #     - name: Push main
-  #       run: git push origin main
-
-  #     - name: Delete update branch
-  #       run: git push --delete origin ${{ needs.update.outputs.branch }} 
+      - name: Update flake.lock
+        uses: DeterminateSystems/update-flake-lock@v8

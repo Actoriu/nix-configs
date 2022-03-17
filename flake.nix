@@ -48,38 +48,36 @@
     #  let pkgs = nixpkgs.legacyPackages.${system};
     #  in { devShell = import ./shell.nix { inherit pkgs; }; }) // {
     {         nixOnDroidConfigurations = {
-               device = nix-on-droid.lib.nixOnDroidConfiguration {
-                 system = "aarch64-linux";
-                 config = {
-                   imports = [
-                     ./modules/programs/nix.nix
-                     ./nix-on-droid.nix
-                   ];
-                   home-manager = {
-                     backupFileExtension = "backup";
-                     useGlobalPkgs = true;
-                     useUserPackages = true;
-                     config = { config, pkgs, ... }: {
-                       nixpkgs = {
-                         config = {
-                           allowUnfree = true;
-                         };
-                       };
-                       imports = [ ./modules/programs/default.nix ];
-                     };
-                     # home-manager.config = import ./modules/programs/default.nix;
-                   };
-                 };
-                 extraModules = [
-                   # import source out-of-tree modules like:
-                   # flake.nixOnDroidModules.module
-                 ];
-                 extraSpecialArgs = {
-                   # arguments to be available in every nix-on-droid module
-                 };
-                 # your own pkgs instance (see nix-on-droid.overlay for useful additions)
-                 # pkgs = ...;
-               };
-             };
-           };
+                device = nix-on-droid.lib.nixOnDroidConfiguration {
+                  system = "aarch64-linux";
+                  config = {
+                    imports = [
+                      ./nix-on-droid.nix
+                    ];
+                    home-manager = {
+                      backupFileExtension = "backup";
+                      useGlobalPkgs = true;
+                      useUserPackages = true;
+                      config = { config, pkgs, ... }: {
+                        nixpkgs = {
+                          config = {
+                            allowUnfree = true;
+                          };
+                        };
+                        imports = [ ./modules/programs/default.nix ];
+                      };
+                    };
+                  };
+                  extraModules = [
+                    # import source out-of-tree modules like:
+                    # flake.nixOnDroidModules.module
+                  ];
+                  extraSpecialArgs = {
+                    # arguments to be available in every nix-on-droid module
+                  };
+                  # your own pkgs instance (see nix-on-droid.overlay for useful additions)
+                  # pkgs = ...;
+                };
+              };
+    };
 }

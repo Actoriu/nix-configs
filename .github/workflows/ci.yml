@@ -2,20 +2,17 @@ name: Build Nix configuration
 
 on:
   push:
-    branches:
-      - main
-      - flake-update
-  workflow_call:
-    inputs:
-      branch:
-        description: Branch name to build on
-        default: ''
-        required: false
-        type: string
-    secrets:
-      # CACHIX_SIGNING_KEY:
-      CACHIX_AUTH_TOKEN:
-        required: true
+  # workflow_call:
+  #   inputs:
+  #     branch:
+  #       description: Branch name to build on
+  #       default: ''
+  #       required: false
+  #       type: string
+  #   secrets:
+  #     # CACHIX_SIGNING_KEY:
+  #     CACHIX_AUTH_TOKEN:
+  #       required: true
 
 jobs:
   build:
@@ -26,8 +23,8 @@ jobs:
       matrix:
         system:
           - aarch64
-        nix-command:
-          - flake check
+        # nix-command:
+        #   - flake check
 
         include:
           - nix-command: build .#nixOnDroidConfigurations.device.activationPackage --impure
@@ -37,13 +34,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.branch }}
+          fetch-depth: 0
 
       - name: Install nix
         uses: cachix/install-nix-action@v16
         with:
           extra_nix_config: |
-            access-tokens = github.com = ${{ secrets.GITHUB_TOKEN }}
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup cachix
         uses: cachix/cachix-action@v10

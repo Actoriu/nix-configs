@@ -1,12 +1,16 @@
 version: 2
 updates:
-  - package-ecosystem: github-actions
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: daily
-      time: "21:00"
-      timezone: UTC
+      interval: "weekly"
     open-pull-requests-limit: 10
     commit-message:
       prefix: "chore"
       include: "scope"
+    reviewers:
+      - "Actoriu"
+    assignees:
+      - "Actoriu"
+    labels:
+      - "dependencies"

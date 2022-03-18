@@ -1,11 +1,9 @@
-# referenced from https://github.com/NobbZ/nixos-config/blob/master/.github/workflows/build.yml
-
-name: Update-flake-lock
+name: "Update-flake-lock"
 
 on:
   workflow_dispatch:
   schedule:
-    - cron:  '* */8 * * *'
+    - cron:  '0 0 * * 0'
 
 jobs:
   lockfile:
@@ -14,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Install nix
         uses: cachix/install-nix-action@v16

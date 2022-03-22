@@ -2,8 +2,14 @@
   description = "nix-on-droid configuration";
 
   nixConfig = {
-    substituters =[
+    substituters = [
       "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+    ];
+    extra-substituters = [
+      "https://actoriu.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "actoriu.cachix.org-1:htl65pXtoZ5aa5pgM5Rj42jg02WGBFabB8vcm3WVm8A="
     ];
   };
 

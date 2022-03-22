@@ -1,6 +1,12 @@
 {
   description = "nix-on-droid configuration";
 
+  nixConfig = {
+    substituters =[
+      "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+    ];
+  };
+
   inputs = {
     nixpkgs = {
       url = "github:NixOS/nixpkgs/release-21.11";

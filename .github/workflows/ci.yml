@@ -23,8 +23,8 @@ jobs:
       matrix:
         system:
           - aarch64
-         nix-command:
-           - flake check
+        nix-command:
+          - flake check
 
         #include:
         #  - nix-command: build .#nixOnDroidConfigurations.device.activationPackage --impure

@@ -1,29 +1,52 @@
-name: "Update-flake-lock"
+name: Update Flakes
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.repository }}-${{ github.head_ref || github.sha }}-${{ github.workflow }}
+  cancel-in-progress: true
 
 jobs:
-  lockfile:
+  get-flakes:
     runs-on: ubuntu-latest
-
+    outputs:
+      matrix: ${{ steps.get-flakes.outputs.matrix }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: cachix/install-nix-action@v16
+      - name: generate flake matrix
+        id: get-flakes
+        run: |
+          set -euo pipefail
 
-      - name: Install nix
-        uses: cachix/install-nix-action@v16
+          flakes="$(nix flake metadata --json | jq -rcM '.locks.nodes.root.inputs | {flake: keys}')"
+          echo "::set-output name=matrix::$flakes"
 
-      - name: Generate token
-        uses: tibdex/github-app-token@v1.5.1
-        id: generate-app-token
+  flake-update:
+    runs-on: ubuntu-latest
+    needs:
+      - get-flakes
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.get-flakes.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cachix/install-nix-action@v16
+      - uses: tibdex/github-app-token@v1.5.1
+        id: generate-token
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
-
-      - name: Update flake.lock
-        uses: DeterminateSystems/update-flake-lock@v8
+      - uses: cpcloud/flake-update-action@v1.0.2
         with:
-          token: ${{ steps.generate-app-token.outputs.token }}
+          dependency: ${{ matrix.flake }}
+          github-token: ${{ steps.generate-token.outputs.token }}
+          pull-request-token: ${{ steps.generate-token.outputs.token }}
+          pull-request-author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          pull-request-branch-prefix: update-
+          pull-request-labels: dependencies,autorebase:opt-in
+          automerge: true
+          delete-branch: true

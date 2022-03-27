@@ -42,13 +42,19 @@ jobs:
           name: actoriu
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
           extraPullNames: actoriu,nix-community,nix-on-droid
-      - uses: nick-invision/retry@v2
-        with:
-          max_attempts: 2
-          timeout_minutes: 1
-          retry_on: error
-          command: |
-            cachix watch-exec actoriu -- \
+      - run: |
+          cachix watch-exec actoriu -- \
             nix run nixpkgs#nix-build-uncached \
             -- \
             build .#nixOnDroidConfigurations.device.activationPackage --impure
+
+      #- uses: nick-invision/retry@v2
+      #  with:
+      #    max_attempts: 2
+      #    timeout_minutes: 1
+      #    retry_on: error
+      #    command: |
+      #      cachix watch-exec actoriu -- \
+      #      nix run nixpkgs#nix-build-uncached \
+      #      -- \
+      #      build .#nixOnDroidConfigurations.device.activationPackage --impure

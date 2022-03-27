@@ -31,7 +31,7 @@ jobs:
       - get-system
     strategy:
       fail-fast: false
-      matrix: ${{ (needs.get-system.outputs.system) }}
+      matrix: ${{ needs.get-system.outputs.matrix }}
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-qemu-action@v1.2

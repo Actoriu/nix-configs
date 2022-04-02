@@ -49,6 +49,13 @@
 
     # Backup etc files instead of failing to activate generation if a file already exists in /etc
     etcBackupExtension = ".bak";
+
+    etc = {
+      "tmp-sshd".text = ''
+      HostKey /data/data/com.termux.nix/files/home/ssh_host_ed25519_key
+      Port 8022
+    '';
+    };
   };
 
   # Read the changelog before changing this value
@@ -59,13 +66,22 @@
   # nix-channel --add https://github.com/rycee/home-manager/archive/release-21.11.tar.gz home-manager
   # nix-channel --update
   # you can configure home-manager in here like
-  # home-manager = {
-  #   backupFileExtension = "backup";
-  #   useGlobalPkgs = true;
-  #   useUserPackages = true;
-  #   config = import ./modules/programs/default.nix;
-  # };
-
+  home-manager = {
+    backupFileExtension = "backup";
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    config = { config, pkgs, ... }: {
+      nixpkgs = {
+        config = {
+          allowUnfree = true;
+        };
+      };
+      home.sessionVariables = {
+        VAULT_ADDR = "http://100.118.252.12:8200";
+      };
+      imports = [ ../../modules/programs/default.nix ];
+    };
+  };
 }
 
-# vim: ft=nix
+  # vim: ft=nix

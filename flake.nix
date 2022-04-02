@@ -6,15 +6,18 @@
       "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
     ];
     extra-substituters = [
-      "https://actoriu.cachix.org"                                #     "https://cachix.cachix.org"
+      "https://cache.nixos.org"
+      "https://actoriu.cachix.org"
       "https://nix-community.cachix.org"
       "https://nix-on-droid.cachix.org"
+      "https://pre-commit-hooks.cachix.org"
     ];
     extra-trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "actoriu.cachix.org-1:htl65pXtoZ5aa5pgM5Rj42jg02WGBFabB8vcm3WVm8A="
-      "cachix.cachix.org-1:eWNHQldwUO7G2VkjpnjDbWwy4KQ/HNxht7H4SSoMckM="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "nix-on-droid.cachix.org-1:56snoMJTXmDRC1Ei24CmKoUqvHJ9XCp+nidK7qkMQrU="
+      "pre-commit-hooks.cachix.org-1:Pkk3Panw5AW24TOv6kz3PvLhlH8puAsJTBbOPmBo7Rc="
     ];
   };
 
@@ -32,8 +35,53 @@
       flake = false;
     };
 
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        utils.follows = "flake-utils";
+        flake-compat.follows = "flake-compat";
+      };
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager/release-21.11";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
+    impermanence = {
+      url = "github:nix-community/impermanence";
+    };
+
+    nix-on-droid = {
+      url = "github:t184256/nix-on-droid";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+        home-manager.follows = "home-manager";
+      };
+    };
+
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
+
+    ragenix = {
+      url = "github:yaxitech/ragenix";
+      inputs ={
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };
@@ -44,57 +92,34 @@
       flake = false;
     };
 
-    nix-on-droid = {
-      url = "github:t184256/nix-on-droid";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home-manager";
-      };
+    templates = {
+      url = "github:NixOS/templates";
     };
+
   };
 
-  outputs =
-    { self
-    , nixpkgs
-    #, flake-utils
-    , home-manager
-    , nix-on-droid
-    , ...
-    }@inputs:
-    #flake-utils.lib.eachSystem [ "aarch64-linux" "x86_64-linux" ] (system:
-    #  let pkgs = nixpkgs.legacyPackages.${system};
-    #  in { devShell = import ./shell.nix { inherit pkgs; }; }) // {
-    {         nixOnDroidConfigurations = {
-                device = nix-on-droid.lib.nixOnDroidConfiguration {
-                  system = "aarch64-linux";
-                  config = {
-                    imports = [
-                      ./nix-on-droid.nix
-                    ];
-                    home-manager = {
-                      backupFileExtension = "backup";
-                      useGlobalPkgs = true;
-                      useUserPackages = true;
-                      config = { config, pkgs, ... }: {
-                        nixpkgs = {
-                          config = {
-                            allowUnfree = true;
-                          };
-                        };
-                        imports = [ ./modules/programs/default.nix ];
-                      };
-                    };
-                  };
-                  extraModules = [
-                    # import source out-of-tree modules like:
-                    # flake.nixOnDroidModules.module
-                  ];
-                  extraSpecialArgs = {
-                    # arguments to be available in every nix-on-droid module
-                  };
-                  # your own pkgs instance (see nix-on-droid.overlay for useful additions)
-                  # pkgs = ...;
-                };
-              };
-    };
+  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+    flake-utils.lib.eachDefaultSystem (system: {
+      checks = import ./nix/checks.nix inputs system;
+
+      devShells.default = import ./nix/dev-shell.nix inputs system;
+
+      packages = {
+        default = self.packages.${system}.hosts;
+        hosts = import ./nix/build-hosts.nix inputs system;
+      };
+
+      legacyPackages = import nixpkgs {
+        inherit system;
+        overlays = [ self.overlays.default ];
+        config.allowUnfree = true;
+        config.allowAliases = true;
+      }
+    }); // {
+      deploy = import ./nix/deploy.nix inputs;
+
+      overlays.default = import ./nix/overlay.nix inputs;
+
+      homeConfigurations = import ./nix/home-manager.nix inputs;
+    }
 }

@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-      - try
+    # branches:
+    #   - main
+    #   - try
   pull_request:
 
 jobs:
@@ -102,17 +102,23 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       # - name: add-mask-overlay
       #   run: cp nix/mask-large-drvs.nix nix/overlays/
-      - name: build-host
-        uses: nick-invision/retry@v2
-        with:
-          max_attempts: 2
-          timeout_minutes: 720
-          retry_on: error
-          command: |
-            cachix watch-exec actoriu -- \
-              nix run nixpkgs#nix-build-uncached -- \
-                --keep-going \
-                -A packages.x86_64-linux.hosts.${{ matrix.host }} 
+      - name: Build
+        run: |
+          cachix watch-exec actoriu -- \
+            nix run nixpkgs#nix-build-uncached -- \
+              --keep-going \
+              -A packages.x86_64-linux.hosts.${{ matrix.host }}
+      # - name: build-host
+      #   uses: nick-invision/retry@v2
+      #   with:
+      #     max_attempts: 2
+      #     timeout_minutes: 720
+      #     retry_on: error
+      #     command: |
+      #       cachix watch-exec actoriu -- \
+      #         nix run nixpkgs#nix-build-uncached -- \
+      #           --keep-going \
+      #           -A packages.x86_64-linux.hosts.${{ matrix.host }} 
   check:
     runs-on: ubuntu-latest
     needs: [ eval-host, build-host ]

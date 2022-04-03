@@ -51,6 +51,13 @@
       };
     };
 
+    gitignore = {
+      url = "github:hercules-ci/gitignore.nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
+
     impermanence = {
       url = "github:nix-community/impermanence";
     };
@@ -99,7 +106,14 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }@inputs:
-    flake-utils.lib.eachDefaultSystem (system: {
+    {
+      deploy = import ./nix/deploy.nix inputs;
+
+      overlays.default = import ./nix/overlay.nix inputs;
+
+      homeConfigurations = import ./nix/home-manager.nix inputs;
+    }
+    // flake-utils.lib.eachDefaultSystem (system: {
       checks = import ./nix/checks.nix inputs system;
 
       devShells.default = import ./nix/dev-shell.nix inputs system;
@@ -115,11 +129,5 @@
         config.allowUnfree = true;
         config.allowAliases = true;
       }
-    }); // {
-      deploy = import ./nix/deploy.nix inputs;
-
-      overlays.default = import ./nix/overlay.nix inputs;
-
-      homeConfigurations = import ./nix/home-manager.nix inputs;
-    }
+    });
 }

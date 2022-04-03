@@ -1,21 +1,23 @@
 { deploy-rs
 , gitignore
-, nixgl
 , nixpkgs
 , ragenix
+, spacemacs
 , ...
 }:
 
 let
   inherit (nixpkgs.lib) composeManyExtensions;
   inherit (builtins) attrNames readDir;
-  localOverlays = map
-    (f: import (./overlays + "/${f}"))
-    (attrNames (readDir ./overlays));
+  # localOverlays = map
+  #   (f: import (./overlays + "/${f}"))
+  #   (attrNames (readDir ./overlays));
 in
-composeManyExtensions (localOverlays ++ [
-  deploy-rs.overlay
-  gitignore.overlay
-  nixgl.overlay
-  ragenix.overlay
-])
+composeManyExtensions (
+  # localOverlays ++
+  [
+    deploy-rs.overlay
+    gitignore.overlay
+    ragenix.overlay
+    spacemacs
+  ])

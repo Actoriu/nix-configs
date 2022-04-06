@@ -50,12 +50,12 @@
     # Backup etc files instead of failing to activate generation if a file already exists in /etc
     etcBackupExtension = ".bak";
 
-    etc = {
-      "tmp-sshd".text = ''
-      HostKey /data/data/com.termux.nix/files/home/ssh_host_ed25519_key
-      Port 8022
-    '';
-    };
+    # etc = {
+    #   "tmp-sshd".text = ''
+    #   HostKey /data/data/com.termux.nix/files/home/ssh_host_ed25519_key
+    #   Port 8022
+    # '';
+    # };
   };
 
   # Read the changelog before changing this value
@@ -75,10 +75,12 @@
         config = {
           allowUnfree = true;
         };
+        inherit (config.nixpkgs) overlays;
       };
-      home.sessionVariables = {
-        VAULT_ADDR = "http://100.118.252.12:8200";
-      };
+      home.stateVersion = "21.11";
+      # home.sessionVariables = {
+      #   VAULT_ADDR = "http://100.118.252.12:8200";
+      # };
       imports = [ ../../modules/programs/default.nix ];
     };
   };

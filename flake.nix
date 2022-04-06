@@ -105,29 +105,30 @@
 
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
-    {
-      deploy = import ./nix/deploy.nix inputs;
+  # outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+  #   {
+  #     deploy = import ./nix/deploy.nix inputs;
 
-      overlays.default = import ./nix/overlay.nix inputs;
+  #     overlays.default = import ./nix/overlay.nix inputs;
 
-      homeConfigurations = import ./nix/home-manager.nix inputs;
-    }
-    // flake-utils.lib.eachDefaultSystem (system: {
-      checks = import ./nix/checks.nix inputs system;
+  #     homeConfigurations = import ./nix/home-manager.nix inputs;
+  #   }
+  #   // flake-utils.lib.eachDefaultSystem (system: {
+  #     checks = import ./nix/checks.nix inputs system;
 
-      devShells.default = import ./nix/dev-shell.nix inputs system;
+  #     devShells.default = import ./nix/dev-shell.nix inputs system;
 
-      packages = {
-        default = self.packages.${system}.hosts;
-        hosts = import ./nix/build-hosts.nix inputs system;
-      };
+  #     packages = {
+  #       default = self.packages.${system}.hosts;
+  #       hosts = import ./nix/build-hosts.nix inputs system;
+  #     };
 
-      legacyPackages = import nixpkgs {
-        inherit system;
-        overlays = [ self.overlays.default ];
-        config.allowUnfree = true;
-        config.allowAliases = true;
-      };
-    });
+  #     legacyPackages = import nixpkgs {
+  #       inherit system;
+  #       overlays = [ self.overlays.default ];
+  #       config.allowUnfree = true;
+  #       config.allowAliases = true;
+  #     };
+  #   });
+  outputs = { ... }@args: import ./nix/outputs.nix args;
 }

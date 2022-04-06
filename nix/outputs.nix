@@ -22,25 +22,25 @@ flake-utils.lib.eachDefaultSystem (system:
     nixOnDroidConfigurations = {
       oneplus5 = nix-on-droid.lib.nixOnDroidConfiguration {
         system = "aarch64-linux";
-        config = ../hosts/oneplus5/default.nix
-          # config = {
-          #   imports = [
-          #     ./nix-on-droid.nix
-          #   ];
-          #   home-manager = {
-          #     backupFileExtension = "backup";
-          #     useGlobalPkgs = true;
-          #     useUserPackages = true;
-          #     config = { config, pkgs, ... }: {
-          #       nixpkgs = {
-          #         config = {
-          #           allowUnfree = true;
-          #         };
-          #       };
-          #       imports = [ ./modules/programs/default.nix ];
-          #     };
-          #   };
-          # };
+        config = ../hosts/oneplus5/default.nix;
+        # config = {
+        #   imports = [
+        #     ./nix-on-droid.nix
+        #   ];
+        #   home-manager = {
+        #     backupFileExtension = "backup";
+        #     useGlobalPkgs = true;
+        #     useUserPackages = true;
+        #     config = { config, pkgs, ... }: {
+        #       nixpkgs = {
+        #         config = {
+        #           allowUnfree = true;
+        #         };
+        #       };
+        #       imports = [ ./modules/programs/default.nix ];
+        #     };
+        #   };
+        # };
       };
     };
     # deploy = {

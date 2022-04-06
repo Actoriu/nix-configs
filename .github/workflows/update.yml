@@ -24,9 +24,9 @@ jobs:
 
           get_flake_inputs() {
             nix flake metadata --json \
-              | jq -rc '
-                   .locks.nodes.root.inputs
-                   | {flake: keys}'
+              | jq -rcM '
+                  .locks.nodes.root.inputs
+                  | {flake: keys}'
           }
 
           echo "::set-output name=matrix::$(get_flake_inputs)"

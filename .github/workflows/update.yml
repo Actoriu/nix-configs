@@ -15,7 +15,7 @@ jobs:
       - uses: cachix/install-nix-action@v16
         with:
           extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+            # access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
             experimental-features = nix-command flakes recursive-nix
       - name: generate flake matrix
         id: get-flakes
@@ -43,7 +43,7 @@ jobs:
       - uses: cachix/install-nix-action@v16
         with:
           extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+            # access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
             experimental-features = nix-command flakes recursive-nix
       - uses: tibdex/github-app-token@v1.5.1
         id: generate-token
@@ -55,8 +55,8 @@ jobs:
           dependency: ${{ matrix.flake }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pull-request-token: ${{ steps.generate-token.outputs.token }}
-          pull-request-author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-          pull-request-branch-prefix: update-
+          pull-request-author: "phillip-ground[bot] <phillip-ground[bot]@users.noreply.github.com>" 
+          # pull-request-branch-prefix: update-
           pull-request-labels: dependencies,autorebase:opt-in
           automerge: true
           delete-branch: true

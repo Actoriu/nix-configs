@@ -24,6 +24,5 @@ jobs:
       - name: build-host
         run: |
           cachix watch-exec actoriu -- \
-            nix run nixpkgs#nix-build-uncached -- \
-              --keep-going \
+            nix build \
               .#nixOnDroidConfigurations.oneplus5.activationPackage --impure 

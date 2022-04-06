@@ -22,13 +22,8 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
           extraPullNames: actoriu,nix-community,nix-on-droid
       - name: build-host
-        uses: nick-invision/retry@v2
-        with:
-          max_attempts: 2
-          timeout_minutes: 720
-          retry_on: error
-          command: |
-            cachix watch-exec actoriu -- \
-              nix run nixpkgs#nix-build-uncached -- \
-                --keep-going \
-                .#nixOnDroidConfigurations.oneplus5.activationPackage --impure 
+        run: |
+          cachix watch-exec actoriu -- \
+            nix run nixpkgs#nix-build-uncached -- \
+              --keep-going \
+              .#nixOnDroidConfigurations.oneplus5.activationPackage --impure 

@@ -1,12 +1,12 @@
-{ self
-, nixpkgs
-, flake-utils
-, home-manager
-, # deploy-rs
-, nix-on-droid
-, # pre-commit-hooks
-, # sops-nix
-, ...
+{ self,
+  nixpkgs,
+  flake-utils,
+  home-manager,
+  # deploy-rs,
+  nix-on-droid,
+  # pre-commit-hooks,
+  # sops-nix,
+  ...
 }@inputs:
 flake-utils.lib.eachDefaultSystem (system:
   let

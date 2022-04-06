@@ -128,6 +128,6 @@
         overlays = [ self.overlays.default ];
         config.allowUnfree = true;
         config.allowAliases = true;
-      }
+      };
     });
 }

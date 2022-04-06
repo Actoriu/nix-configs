@@ -70,7 +70,7 @@
     backupFileExtension = "backup";
     useGlobalPkgs = true;
     useUserPackages = true;
-    config = { config, pkgs, ... }: {
+    config = { pkgs, lib, ... }: {
       nixpkgs = {
         config = {
           allowUnfree = true;
@@ -86,4 +86,4 @@
   };
 }
 
-  # vim: ft=nix
+# vim: ft=nix

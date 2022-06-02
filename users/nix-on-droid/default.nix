@@ -22,10 +22,8 @@
       fzf.enable = true;
       git.enable = true;
       gnupg.enable = true;
-      # lorri.enable = true;
       openssh.enable = true;
       password-store.enable = true;
-      # rofi.enable = true;
       # tmux.enable = true;
       xdg.enable = true;
       zoxide.enable = true;

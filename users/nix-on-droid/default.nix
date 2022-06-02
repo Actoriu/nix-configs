@@ -14,10 +14,7 @@
     editors = {
       emacs.enable = true;
       # neovim.enable = true;
-      # zathura.enable = true;
     };
-    # redshift.enable = true;
-    # xsettingsd.enable = true;
     shell = {
       bat.enable = true;
       dircolors.enable = true;
@@ -31,17 +28,8 @@
       # rofi.enable = true;
       # tmux.enable = true;
       xdg.enable = true;
-      # xresources.enable = true;
       zoxide.enable = true;
       zsh.enable = true;
     };
-    # terminal = {
-    #   alacritty.enable = true;
-    #   urxvt.enable = true;
-    #   xst.enable = true;
-    # };
-    # video = {
-    #   mpv.enable = true;
-    # };
   };
 }

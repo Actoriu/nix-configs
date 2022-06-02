@@ -1,0 +1,17 @@
+imports = ["git/hooks"]
+git.hooks.enable = true
+git.hooks.pre-comment = "treefmt"
+
+[devshell]
+name = "devshell"
+
+packages = [
+  "alejandra",
+  "treefmt",
+]
+
+[[commands]]
+name = "switch"
+category = "devos"
+command = "nix-on-droid switch --flake .#device"
+help = "Build and activate configuration."

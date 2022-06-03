@@ -7,6 +7,8 @@ name = "devshell"
 
 packages = [
   "alejandra",
+  "cachix",
+  "nix-build-uncached",
   "nodePackages.prettier",
   "nodePackages.prettier-plugin-toml",
   "shfmt",

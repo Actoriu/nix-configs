@@ -43,6 +43,7 @@
         overlays = [inputs.devshell.overlay];
       };
     in {
+      legacyPackages = pkgs;
       devShell = pkgs.devshell.fromTOML ./devshell.toml;
     })
     // {
@@ -67,11 +68,10 @@
               }: {
                 nixpkgs = {
                   config.allowUnfree = true;
-                  overlays =
-                    [
-                      (final: prev: {spacemacs = inputs.spacemacs;})
-                    ]
-                    ++ config.nixpkgs.overlays;
+                  overlays = [
+                    (final: prev: {spacemacs = inputs.spacemacs;})
+                  ];
+                  # ++ config.nixpkgs.overlays;
                 };
                 home.stateVersion = "21.11";
                 imports = [./users/nix-on-droid/default.nix];

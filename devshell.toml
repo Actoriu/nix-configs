@@ -7,7 +7,10 @@ name = "devshell"
 
 packages = [
   "alejandra",
-  "treefmt",
+  "nodePackages.prettier",
+  "nodePackages.prettier-plugin-toml",
+  "shfmt",
+  "treefmt"
 ]
 
 [[commands]]
@@ -15,3 +18,7 @@ name = "switch"
 category = "devos"
 command = "nix-on-droid switch --flake .#device"
 help = "Build and activate configuration."
+
+[[env]]
+name = "NODE_PATH"
+value = "nodePackages.prettier-plugin-toml/lib/node_modules"

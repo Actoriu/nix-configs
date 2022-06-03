@@ -35,22 +35,49 @@
     };
   };
 
-  outputs = { self, ... }@inputs:
-    inputs.flake-utils.lib.eachSystem [ "aarch64-linux" ] (system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [ devshell.overlay ];
-        };
-      in
-        {
-          devShell = pkgs.devshell.fromTOML ./devshell.toml;
-        })
+  outputs = {self, ...} @ inputs:
+    inputs.flake-utils.lib.eachSystem ["aarch64-linux"] (system: let
+      pkgs = import inputs.nixpkgs {
+        inherit system;
+        config = {allowUnfree = true;};
+        overlays = [inputs.devshell.overlay];
+      };
+    in {
+      devShell = pkgs.devshell.fromTOML ./devshell.toml;
+    })
     // {
       nixOnDroidConfigurations = {
         device = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
           system = "aarch64-linux";
-          config = ./nix-on-droid.nix {inherit inputs;};
+          config = {
+            config,
+            lib,
+            ...
+          }: {
+            imports = [./hosts/oneplus5/default.nix];
+            home-manager = {
+              backupFileExtension = "backup";
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              config = {
+                config,
+                lib,
+                pkgs,
+                ...
+              }: {
+                nixpkgs = {
+                  config.allowUnfree = true;
+                  overlays =
+                    [
+                      (final: prev: {spacemacs = inputs.spacemacs;})
+                    ]
+                    ++ config.nixpkgs.overlays;
+                };
+                home.stateVersion = "21.11";
+                imports = [./users/nix-on-droid/default.nix];
+              };
+            };
+          };
         };
       };
     };

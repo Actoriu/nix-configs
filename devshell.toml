@@ -1,7 +1,3 @@
-imports = ["git/hooks"]
-git.hooks.enable = true
-git.hooks.pre-comment = "treefmt"
-
 [devshell]
 name = "devshell"
 
@@ -14,6 +10,10 @@ packages = [
   "shfmt",
   "treefmt"
 ]
+
+imports = ["git/hooks"]
+git.hooks.enable = true
+git.hooks.pre-comment = "treefmt"
 
 [[commands]]
 name = "switch"

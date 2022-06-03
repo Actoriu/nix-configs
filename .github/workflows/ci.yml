@@ -55,9 +55,8 @@ jobs:
           timeout_minutes: 720
           retry_on: error
           command: |
-            cachix watch-exec nix-actions -- \
-              nix \
-                --log-format bar-with-logs \
-                --option keep-going true \
-                --show-trace \
-                ${{ matrix.nix-command }}
+            nix \
+              --log-format bar-with-logs \
+              --option keep-going true \
+              --show-trace \
+              ${{ matrix.nix-command }}

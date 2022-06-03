@@ -44,7 +44,7 @@
       };
     in {
       legacyPackages = pkgs;
-      devShell = pkgs.devshell.fromTOML ./devshell.toml;
+      devShells.<system>.default = pkgs.devshell.fromTOML ./devshell.toml;
     })
     // {
       nixOnDroidConfigurations = {
@@ -52,8 +52,8 @@
           system = "aarch64-linux";
           config = {
             config,
-            lib,
-            ...
+              lib,
+              ...
           }: {
             imports = [./hosts/oneplus5/default.nix];
             home-manager = {
@@ -62,9 +62,9 @@
               useUserPackages = true;
               config = {
                 config,
-                lib,
-                pkgs,
-                ...
+                  lib,
+                  pkgs,
+                  ...
               }: {
                 nixpkgs = {
                   config.allowUnfree = true;

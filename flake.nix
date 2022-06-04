@@ -67,7 +67,7 @@
     })
     // {
       nixOnDroidConfigurations = {
-        device = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
+        oneplus5 = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
           system = "aarch64-linux";
           config = {
             config,

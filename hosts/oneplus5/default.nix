@@ -57,7 +57,7 @@
   # you can configure home-manager in here like
   # home-manager = {
   #   backupFileExtension = "backup";
-  #   # useGlobalPkgs = true;
+  #   useGlobalPkgs = true;
   #   useUserPackages = true;
   #   config = { config, lib, pkgs, ... }: {
   #     nixpkgs = {
@@ -71,5 +71,4 @@
   #   };
   # };
 }
-# vim: ft=nix
-
+  # vim: ft=nix

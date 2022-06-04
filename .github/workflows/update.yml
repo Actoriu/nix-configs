@@ -1,15 +1,43 @@
-name: Update inputs
+name: update-flakes
+
 on:
   schedule:
     - cron: '0 0 * * 0'
   workflow_dispatch:
 
 jobs:
-  update:
+  get-flakes:
     runs-on: ubuntu-latest
     outputs:
-      branch: ${{ steps.branch.outputs.branch }}
-      update_available: ${{ steps.commit.outputs.changes_detected }}
+      matrix: ${{ steps.get-flakes.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3.0.2
+        with:
+          fetch-depth: 0
+      - name: Install nix
+        uses: cachix/install-nix-action@v17
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: generate flake matrix
+        id: get-flakes
+        run: |
+          get_flake_inputs() {
+            nix flake metadata --json \
+              | jq -c '
+                  .locks.nodes.root.inputs
+                  | {flake: keys}'
+          }
+          echo "::set-output name=matrix::$(get_flake_inputs)"
+
+  update-flake:
+    runs-on: ubuntu-latest
+    needs:
+      - get-flakes
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.get-flakes.outputs.matrix) }}
     steps:
       - name: Set swap space
         uses: pierotofy/set-swap-space@v1.0
@@ -22,55 +50,22 @@ jobs:
       - name: Install nix
         uses: cachix/install-nix-action@v17
         with:
-          nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-      - name: Update inputs
-        run: nix flake update
-      - name: Set branch name output
-        id: branch
-        run: |
-          echo "::set-output name=branch::ci/automatic-update-$(date +%Y-%m-%d)"
-      - name: Create branch locally
-        run: |
-          git switch -c ${{ steps.branch.outputs.branch }}
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4.14.1
-        id: commit
+      - name: Generate token
+        uses: tibdex/github-app-token@v1.5.2
+        id: generate-token
         with:
-          commit_author: Tobias Happ <tobias.happ@gmx.de>
-          commit_message: "flake.inputs: automatic update"
-          branch: ${{ steps.branch.outputs.branch }}
-          push_options: --force
-
-  build:
-    uses: ./.github/workflows/ci.yml
-    needs: update
-    if: needs.update.outputs.update_available == 'true'
-    with:
-      branch: ${{ needs.update.outputs.branch }}
-    secrets:
-      CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_SIGNING_KEY }}
-
-  merge:
-    runs-on: ubuntu-latest
-    needs:
-      - update
-      - build
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3.0.2
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+      - name: update-${{ matrix.flake }}
+        uses: cpcloud/flake-update-action@v1.0.2
         with:
-          fetch-depth: 0
-      - name: Check if update branch is behind master
-        run: |
-          git diff origin/${{ needs.update.outputs.branch }}...origin/master --exit-code
-      - name: Merge update into master
-        run: |
-          git merge origin/${{ needs.update.outputs.branch }}
-      - name: Push master
-        run: |
-          git push origin master
-      - name: Delete update branch
-        run: |
-          git push --delete origin ${{ needs.update.outputs.branch }}
+          dependency: ${{ matrix.flake }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-token: ${{ steps.generate-token.outputs.token }}
+          pull-request-author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          pull-request-branch-prefix: update-
+          pull-request-labels: dependencies,autorebase:opt-in
+          automerge: true
+          delete-branch: true

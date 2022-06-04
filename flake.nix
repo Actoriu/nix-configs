@@ -2,7 +2,7 @@
   description = "nix-on-droid configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-21.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
 
     flake-utils.url = "github:numtide/flake-utils";
 
@@ -12,7 +12,7 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-21.11";
+      url = "github:nix-community/home-manager";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };
@@ -36,49 +36,90 @@
   };
 
   outputs = {self, ...} @ inputs:
-    inputs.flake-utils.lib.eachSystem ["aarch64-linux"] (system: let
-      pkgs = import inputs.nixpkgs {
-        inherit system;
-        config = {allowUnfree = true;};
-        overlays = [inputs.devshell.overlay];
-      };
-    in {
-      legacyPackages = pkgs;
-      devShells.${system}.default = pkgs.devshell.fromTOML ./devshell.toml;
-    })
-    // {
-      nixOnDroidConfigurations = {
-        device = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
-          system = "aarch64-linux";
-          config = {
-            config,
-            lib,
-            ...
-          }: {
-            imports = [./hosts/oneplus5/default.nix];
-            home-manager = {
-              backupFileExtension = "backup";
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              config = {
-                config,
+    inputs.flake-utils.lib.eachSystem ["aarch64-linux"] (system:
+      let
+        pkgs = import inputs.nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+          overlays = [
+            inputs.devshell.overlay
+            (final: prev: { spacemacs = inputs.spacemacs; })
+          ];
+        };
+      in {
+        devShell = pkgs.devshell.mkShell {
+          name = "nix-on-droid-config";
+          imports = [ (pkgs.devshell.extraModulesDir + "/git/hooks.nix") ];
+          git.hooks.enable = true;
+          git.hooks.pre-commit.text = "${pkgs.treefmt}/bin/treefmt";
+          packages = with pkgs; [
+            alejandra
+            cachix
+            nix-build-uncached
+            nodePackages.prettier
+            nodePackages.prettier-plugin-toml
+            shfmt
+            treefmt
+          ];
+          devshell.startup.nodejs-setuphook = pkgs.lib.stringsWithDeps.noDepEntry ''
+            export NODE_PATH=${pkgs.nodePackages.prettier-plugin-toml}/lib/node_modules:$NODE_PATH
+          '';
+        };
+        nixOnDroidConfigurations = {
+          device = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
+            system = "aarch64-linux";
+            config = {
+              config,
                 lib,
-                pkgs,
                 ...
-              }: {
-                nixpkgs = {
-                  config.allowUnfree = true;
-                  overlays = [
-                    (final: prev: {spacemacs = inputs.spacemacs;})
-                  ];
-                  # ++ config.nixpkgs.overlays;
+            }: {
+              imports = [./hosts/oneplus5/default.nix];
+              home-manager = {
+                backupFileExtension = "backup";
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                config = {
+                  config,
+                    lib,
+                    pkgs,
+                    ...
+                }: {
+                  nixpkgs = pkgs;
+                  home.stateVersion = "21.11";
+                  imports = [./users/nix-on-droid/default.nix];
                 };
-                home.stateVersion = "21.11";
-                imports = [./users/nix-on-droid/default.nix];
               };
             };
           };
         };
-      };
-    };
+      });
+  # // {
+  #   nixOnDroidConfigurations = {
+  #     device = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
+  #       system = "aarch64-linux";
+  #       config = {
+  #         config,
+  #           lib,
+  #           ...
+  #       }: {
+  #         imports = [./hosts/oneplus5/default.nix];
+  #         home-manager = {
+  #           backupFileExtension = "backup";
+  #           useGlobalPkgs = true;
+  #           useUserPackages = true;
+  #           config = {
+  #             config,
+  #               lib,
+  #               pkgs,
+  #               ...
+  #           }: {
+  #             nixpkgs = nixpkgsConfig { system = "aarch64-linux"; };
+  #             home.stateVersion = "21.11";
+  #             imports = [./users/nix-on-droid/default.nix];
+  #           };
+  #         };
+  #       };
+  #     };
+  #   };
+  # };
 }

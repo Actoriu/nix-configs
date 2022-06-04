@@ -1,30 +1,17 @@
 name: Build and test flake outputs
+
 on:
   push:
   workflow_dispatch:
-    inputs:
-      branch:
-        description: Branch name to build on
-        default: ''
-        required: false
-        type: string
-    secrets:
-      CACHIX_SIGNING_KEY:
-        required: true
 
 jobs:
-  nix:
+  build:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        system:
-          - aarch64
-        nix-command:
-          - flake check
-        include:
-          - nix-command: build .#nixOnDroidConfigurations.oneplus5.activationPackage --impure
-            system: aarch64
+        devicename:
+          - oneplus5
     steps:
       - name: Set swap space
         uses: pierotofy/set-swap-space@v1.0
@@ -33,30 +20,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3.0.2
         with:
-          ref: ${{ inputs.branch }}
+          fetch-depth: 0
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Install nix
         uses: cachix/install-nix-action@v17
         with:
-          nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
             extra-platforms = aarch64-linux
+      - name: Check nix configuration
+        run: |
+          nix flake check --no-build
       - name: Setup cachix
         uses: cachix/cachix-action@v10
         with:
           name: nix-actions
           signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
           extraPullNames: nix-community,nix-on-droid
-      - name: Retry run commands
-        uses: nick-invision/retry@v2.7.0
-        with:
-          max_attempts: 2
-          timeout_minutes: 720
-          retry_on: error
-          command: |
-            nix \
-              --log-format bar-with-logs \
-              --option keep-going true \
-              --show-trace \
-              ${{ matrix.nix-command }}
+      - name: Build ${{ matrix.devicename }} configuration
+        run: |
+          nix -L --keep-going --show-trace \
+            build --impure \
+            .#nixOnDroidConfigurations.${{ matrix.devicename }}.activationPackage

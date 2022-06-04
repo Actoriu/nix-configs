@@ -9,11 +9,5 @@ includes = ["*.md", "*.yaml", "*.toml", "*.json"]
 
 [formatter.shell]
 command = "shfmt"
-options = [
-  "-i",
-  "2", # indent 2
-  "-s", # simplify the code
-  "-w", # write back to the file
-
-]
+options = [ "-i", "2", "-s", "-w" ]
 includes = ["*.sh", "*.zsh"]

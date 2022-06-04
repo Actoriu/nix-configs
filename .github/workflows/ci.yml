@@ -39,7 +39,11 @@ jobs:
         with:
           name: nix-actions
           signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-          extraPullNames: nix-community,nix-on-droid
+          # extraPullNames: nix-community,nix-on-droid
+      - name: Build ${{ matrix.system }}
       - run: |
-          nix -L --keep-going --show-trace \
+          nix \
+            --log-format bar-with-logs \
+            --option keep-going true \
+            --show-trace \
             ${{ matrix.nix-command }}

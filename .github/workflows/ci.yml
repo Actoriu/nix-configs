@@ -41,7 +41,7 @@ jobs:
           signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
           # extraPullNames: nix-community,nix-on-droid
       - name: Build ${{ matrix.system }}
-      - run: |
+        run: |
           nix \
             --log-format bar-with-logs \
             --option keep-going true \

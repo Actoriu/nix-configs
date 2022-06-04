@@ -10,8 +10,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        devicename:
-          - oneplus5
+        system:
+          - aarch64
+        nix-command:
+          - flake check --no-build
+        include:
+          - nix-command: build .#nixOnDroidConfigurations.oneplus5.activationPackage --impure
+            system: aarch64
     steps:
       - name: Set swap space
         uses: pierotofy/set-swap-space@v1.0
@@ -29,17 +34,12 @@ jobs:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
             extra-platforms = aarch64-linux
-      - name: Check nix configuration
-        run: |
-          nix flake check --no-build
       - name: Setup cachix
         uses: cachix/cachix-action@v10
         with:
           name: nix-actions
           signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
           extraPullNames: nix-community,nix-on-droid
-      - name: Build ${{ matrix.devicename }} configuration
-        run: |
+      - run: |
           nix -L --keep-going --show-trace \
-            build --impure \
-            .#nixOnDroidConfigurations.${{ matrix.devicename }}.activationPackage
+            ${{ matrix.nix-command }}

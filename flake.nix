@@ -77,7 +77,7 @@
             imports = [./hosts/oneplus5/default.nix];
             home-manager = {
               backupFileExtension = "backup";
-              useGlobalPkgs = true;
+              # useGlobalPkgs = true;
               useUserPackages = true;
               config = {
                 config,

@@ -46,7 +46,6 @@
         ];
       };
     in {
-      legacyPackages = pkgs;
       devShell = pkgs.devshell.mkShell {
         name = "nix-on-droid-config";
         imports = [(pkgs.devshell.extraModulesDir + "/git/hooks.nix")];
@@ -66,7 +65,7 @@
         '';
       };
       nixOnDroidConfigurations = {
-        device = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
+        oneplus5 = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
           system = "aarch64-linux";
           config = {
             config,

@@ -2,7 +2,7 @@
   description = "nix-on-droid configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-21.11";
 
     flake-utils.url = "github:numtide/flake-utils";
 
@@ -12,7 +12,7 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-21.11";
       inputs = {
         nixpkgs.follows = "nixpkgs";
       };
@@ -52,9 +52,9 @@
         git.hooks.enable = true;
         git.hooks.pre-commit.text = "${pkgs.treefmt}/bin/treefmt";
         packages = with pkgs; [
-          alejandra
           cachix
           nix-build-uncached
+          nixpkgs-fmt
           nodePackages.prettier
           nodePackages.prettier-plugin-toml
           shfmt

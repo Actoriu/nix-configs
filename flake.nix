@@ -64,8 +64,10 @@
           export NODE_PATH=${pkgs.nodePackages.prettier-plugin-toml}/lib/node_modules:$NODE_PATH
         '';
       };
+    })
+    // {
       nixOnDroidConfigurations = {
-        oneplus5 = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
+        device = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
           system = "aarch64-linux";
           config = {
             config,
@@ -83,7 +85,10 @@
                 pkgs,
                 ...
               }: {
-                nixpkgs = pkgs;
+                nixpkgs = {
+                  config.allowUnfree = true;
+                  overlays = [(final: prev: {spacemacs = inputs.spacemacs;})];
+                };
                 home.stateVersion = "21.11";
                 imports = [./users/nix-on-droid/default.nix];
               };
@@ -91,34 +96,5 @@
           };
         };
       };
-    });
-  # // {
-  #   nixOnDroidConfigurations = {
-  #     device = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
-  #       system = "aarch64-linux";
-  #       config = {
-  #         config,
-  #           lib,
-  #           ...
-  #       }: {
-  #         imports = [./hosts/oneplus5/default.nix];
-  #         home-manager = {
-  #           backupFileExtension = "backup";
-  #           useGlobalPkgs = true;
-  #           useUserPackages = true;
-  #           config = {
-  #             config,
-  #               lib,
-  #               pkgs,
-  #               ...
-  #           }: {
-  #             nixpkgs = nixpkgsConfig { system = "aarch64-linux"; };
-  #             home.stateVersion = "21.11";
-  #             imports = [./users/nix-on-droid/default.nix];
-  #           };
-  #         };
-  #       };
-  #     };
-  #   };
-  # };
+    };
 }

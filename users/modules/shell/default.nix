@@ -1,4 +1,4 @@
-{...}: {
+{ ... }: {
   imports = [
     ./bat/default.nix
     ./dircolors/default.nix

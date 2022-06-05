@@ -1,5 +1,5 @@
-{...}: {
-  imports = [../modules/default.nix];
+{ ... }: {
+  imports = [ ../modules/default.nix ];
 
   programs.home-manager.enable = true;
   manual.manpages.enable = false;

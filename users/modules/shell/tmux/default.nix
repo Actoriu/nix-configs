@@ -1,11 +1,11 @@
-{
-  config,
-  lib,
-  ...
+{ config
+, lib
+, ...
 }:
 with lib; let
   cfg = config.custom.shell.tmux;
-in {
+in
+{
   options.custom.shell.tmux = {
     enable = mkEnableOption "Enable support for tmux.";
   };

@@ -1,11 +1,11 @@
-{
-  config,
-  lib,
-  ...
+{ config
+, lib
+, ...
 }:
 with lib; let
   cfg = config.custom.shell.password-store;
-in {
+in
+{
   options.custom.shell.password-store = {
     enable = mkEnableOption "Enable support for password-store.";
   };

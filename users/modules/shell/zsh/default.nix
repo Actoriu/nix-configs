@@ -1,12 +1,12 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 with lib; let
   cfg = config.custom.shell.zsh;
-in {
+in
+{
   options.custom.shell.zsh = {
     enable = mkEnableOption "Enable support for zsh.";
   };

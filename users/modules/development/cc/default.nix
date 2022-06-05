@@ -1,12 +1,12 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 with lib; let
   cfg = config.custom.development.cc;
-in {
+in
+{
   options.custom.development.cc = {
     enable = mkEnableOption "Enable support for C/C++ language.";
   };

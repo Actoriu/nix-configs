@@ -1,12 +1,12 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 with lib; let
   cfg = config.custom.editors.emacs;
-in {
+in
+{
   options.custom.editors.emacs = {
     enable = mkEnableOption "Enable support for emacs.";
     doom-emacs = mkEnableOption "Enable support for doom-emacs.";

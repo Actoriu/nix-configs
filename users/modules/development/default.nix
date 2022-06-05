@@ -1,4 +1,4 @@
-{...}: {
+{ ... }: {
   imports = [
     ./cc/default.nix
     ./nodejs/default.nix

@@ -1,12 +1,12 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 with lib; let
   cfg = config.custom.development.python;
-in {
+in
+{
   options.custom.development.python = {
     enable = mkEnableOption "Enable support for python language.";
   };

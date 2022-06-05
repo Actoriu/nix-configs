@@ -1,11 +1,11 @@
-{
-  config,
-  lib,
-  ...
+{ config
+, lib
+, ...
 }:
 with lib; let
   cfg = config.custom.shell.dircolors;
-in {
+in
+{
   options.custom.shell.dircolors = {
     enable = mkEnableOption "Enable support for dircolors.";
   };

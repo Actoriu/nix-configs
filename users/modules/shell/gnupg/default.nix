@@ -1,11 +1,11 @@
-{
-  config,
-  lib,
-  ...
+{ config
+, lib
+, ...
 }:
 with lib; let
   cfg = config.custom.shell.gnupg;
-in {
+in
+{
   options.custom.shell.gnupg = {
     enable = mkEnableOption "Enable support for gnupg.";
   };

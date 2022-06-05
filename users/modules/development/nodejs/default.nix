@@ -1,12 +1,12 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 with lib; let
   cfg = config.custom.development.nodejs;
-in {
+in
+{
   options.custom.development.nodejs = {
     enable = mkEnableOption "Enable support for javascript language.";
   };

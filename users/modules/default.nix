@@ -1,4 +1,4 @@
-{...}: {
+{ ... }: {
   imports = [
     ./development/default.nix
     ./editors/default.nix

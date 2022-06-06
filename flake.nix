@@ -39,7 +39,7 @@
 
   outputs = { self, ... } @ inputs:
     let
-      nixpkgsconfig = {
+      nixpkgsConfig = {
         config = { allowUnfree = true; };
       };
       overlays = [

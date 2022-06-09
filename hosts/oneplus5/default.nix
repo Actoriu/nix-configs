@@ -1,4 +1,6 @@
-{ config
+{ self
+, config
+, inputs
 , pkgs
 , ...
 }: {
@@ -54,21 +56,20 @@
   # nix-channel --add https://github.com/rycee/home-manager/archive/release-21.11.tar.gz home-manager
   # nix-channel --update
   # you can configure home-manager in here like
-  # home-manager = {
-  #   backupFileExtension = "backup";
-  #   useGlobalPkgs = true;
-  #   useUserPackages = true;
-  #   config = { config, lib, pkgs, ... }: {
-  #     nixpkgs = {
-  #       config.allowUnfree = true;
-  #       overlays = [
-  #         (final: prev: { spacemacs = inputs.spacemacs; })
-  #       ] ++ config.nixpkgs.overlays;
-  #     };
-  #     home.stateVersion = "21.11";
-  #     imports = [ ./users/nix-on-droid/default.nix ];
-  #   };
-  # };
+  home-manager = {
+    backupFileExtension = "backup";
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    config = { config, lib, pkgs, ... }: {
+      nixpkgs = {
+        config.allowUnfree = true;
+        overlays = [
+          (final: prev: { spacemacs = inputs.spacemacs; })
+        ] ++ config.nixpkgs.overlays;
+      };
+      home.stateVersion = "21.11";
+      imports = [ ./users/nix-on-droid/default.nix ];
+    };
+  };
 }
 # vim: ft=nix
-

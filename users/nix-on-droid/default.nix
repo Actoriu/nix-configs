@@ -12,7 +12,10 @@
       # texlive.enable = true;
     };
     editors = {
-      emacs.enable = true;
+      emacs = {
+        enable = true;
+        spacemacs = true;
+      };
       # neovim.enable = true;
     };
     shell = {
